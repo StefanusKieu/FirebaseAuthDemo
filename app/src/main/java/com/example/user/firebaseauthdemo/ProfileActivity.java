@@ -23,7 +23,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     private DatabaseReference databaseReference;
     private EditText editTextName,editTextAddress;
     private Button buttonSave;
-    private Button gotoChat;
+    private Button gotoChat,buttonOTO;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +41,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         editTextName=(EditText)findViewById(R.id.editTextName);
         buttonSave=(Button) findViewById(R.id.buttonAddPeople);
         gotoChat=(Button) findViewById(R.id.gotoChat);
+        buttonOTO=(Button) findViewById(R.id.buttonOTO);
 
         FirebaseUser user = firebaseAuth.getCurrentUser();
 
@@ -50,14 +51,15 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         buttonLogout.setOnClickListener(this);
         buttonSave.setOnClickListener(this);
         gotoChat.setOnClickListener(this);
+        buttonOTO.setOnClickListener(this);
     }
 
     private void saveUserInformation(){
         String name = editTextName.getText().toString().trim();
         String add= editTextAddress.getText().toString().trim();
-        UserInformation userInformation = new UserInformation(name,add);
         FirebaseUser user = firebaseAuth.getCurrentUser();
         String uID=user.getUid();
+        UserInformation userInformation = new UserInformation(name,add,uID);
         databaseReference.child(uID).setValue(userInformation);
         //databaseReference.setValue(userInformation);
         Toast.makeText(this,"Information Saved.",Toast.LENGTH_LONG).show();
@@ -75,13 +77,17 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
             saveUserInformation();
         }
         if (view==gotoChat){
+            //finish();
+            //startActivity(new Intent(getApplicationContext(),Chat.class));
+        }
+        if (view==buttonOTO){
             finish();
-            startActivity(new Intent(getApplicationContext(),Chat.class));
+            startActivity(new Intent(getApplicationContext(),OneToOneChat.class));
         }
     }
     public void gotochatroom(){
         startActivity(new Intent(getApplicationContext(),Chat.class));
-        //startActivity(new Intent(this, Chat.class));
+        startActivity(new Intent(this, Chat.class));
     }
 
 }
